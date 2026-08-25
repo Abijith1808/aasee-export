@@ -1,0 +1,10 @@
+# Local binary presentation files
+Aasee Website Content .pptx
+
+# macOS system files
+.DS_Store
+
+# Local text editor / IDE configs
+.vscode/
+.idea/
+*.log
