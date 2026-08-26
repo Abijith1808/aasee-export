@@ -42,11 +42,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.05,
+        rootMargin: '0px 0px 50px 0px'
     });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+    revealElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight + 50) {
+            el.classList.add('active');
+        } else {
+            revealObserver.observe(el);
+        }
+    });
 
     // Dynamic Copyright Year
     const yearSpan = document.getElementById('copyright-year');

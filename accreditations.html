@@ -40,7 +40,7 @@
 
     <!-- Page Hero Banner -->
     <section class="about-hero" id="accreditations-hero">
-        <img src="Product category images - Home Page/Table linen option 1.jpg" alt="Fabric Quality Inspections background" class="about-hero-bg">
+        <img src="Home Page Images/Accreditation_Cover.jpg" alt="Aasee Export Ethical Sourcing and Certifications" class="about-hero-bg">
         <div class="about-hero-content">
             <span class="section-subtitle" style="color: var(--brand-secondary);">Certifications</span>
             <h1>Our <span>Accreditations</span></h1>
@@ -58,39 +58,49 @@
             
             <!-- Card 1 -->
             <div class="accreditation-card reveal" data-key="sa8000">
-                <div class="accreditation-badge">SA800</div>
-                <h3>SA8000 Standard</h3>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/SA8000.png" alt="SA 8000 Standard Logo">
+                </div>
+                <h3>SA 8000 Standard</h3>
                 <p>Ensures fair working conditions, ethical treatment of workers, and safe workplaces throughout our units.</p>
                 <span class="learn-more">Details &rarr;</span>
             </div>
 
             <!-- Card 2 -->
             <div class="accreditation-card reveal" data-key="bci">
-                <div class="accreditation-badge">BCI</div>
-                <h3>Better Cotton</h3>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/BCI.png" alt="Better Cotton Initiative Logo">
+                </div>
+                <h3>Better Cotton Initiative</h3>
                 <p>Promotes sustainable cotton farming practices that reduce environmental impact and support farmers.</p>
                 <span class="learn-more">Details &rarr;</span>
             </div>
 
             <!-- Card 3 -->
             <div class="accreditation-card reveal" data-key="gots">
-                <div class="accreditation-badge">GOTS</div>
-                <h3>Organic Textile</h3>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/GOTS.jpg" alt="Global Organic Textile Standard Logo">
+                </div>
+                <h3>Global Organic Textile Standard</h3>
                 <p>Certifies organic textiles with strict environmental and social criteria across the entire supply chain.</p>
                 <span class="learn-more">Details &rarr;</span>
             </div>
 
             <!-- Card 4 -->
             <div class="accreditation-card reveal" data-key="grs">
-                <div class="accreditation-badge">GRS</div>
-                <h3>Recycled Standard</h3>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/GRS.jpg" alt="Global Recycled Standard Logo">
+                </div>
+                <h3>Global Recycled Standard</h3>
                 <p>Verifies the use of recycled materials while ensuring responsible social and environmental practices.</p>
                 <span class="learn-more">Details &rarr;</span>
             </div>
 
             <!-- Card 5 -->
             <div class="accreditation-card reveal" data-key="higg">
-                <div class="accreditation-badge">HIGG</div>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/HIGG.png" alt="Higg Index Logo">
+                </div>
                 <h3>Higg Index</h3>
                 <p>Measures and improves environmental sustainability and social performance across our factories.</p>
                 <span class="learn-more">Details &rarr;</span>
@@ -98,8 +108,10 @@
 
             <!-- Card 6 -->
             <div class="accreditation-card reveal" data-key="oeko">
-                <div class="accreditation-badge">OEKO</div>
-                <h3>OEKO-TEX 100</h3>
+                <div class="accreditation-badge">
+                    <img src="Accreditations/OEKO-TEX.jpg" alt="OEKO-TEX Standard 100 Logo">
+                </div>
+                <h3>Oeko-Tex 100</h3>
                 <p>Ensures our finished fabrics are tested and completely free from harmful chemicals, making them skin-safe.</p>
                 <span class="learn-more">Details &rarr;</span>
             </div>
@@ -256,7 +268,7 @@
                     if (data) {
                         drawerTitle.textContent = data.title;
                         drawerDesc.textContent = data.desc;
-                        drawerBadge.textContent = card.querySelector('.accreditation-badge').textContent;
+                        drawerBadge.innerHTML = card.querySelector('.accreditation-badge').innerHTML;
                         
                         // Clear and build details list
                         detailsList.innerHTML = '';
