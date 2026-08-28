@@ -8,9 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const lightboxCatLabel = document.getElementById('lightbox-cat-label');
     const lightboxTitleText = document.getElementById('lightbox-title-text');
     const lightboxDescription = document.getElementById('lightbox-description');
-    const specComposition = document.getElementById('spec-composition');
-    const specDimensions = document.getElementById('spec-dimensions');
-    const specFinishing = document.getElementById('spec-finishing');
 
     // 1. Filtering Functionality
     const filterProducts = (category) => {
@@ -71,51 +68,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const openLightbox = (item) => {
         const title = item.getAttribute('data-title');
         const desc = item.getAttribute('data-desc');
-        const fabric = item.getAttribute('data-fabric');
-        const size = item.getAttribute('data-size');
-        const finish = item.getAttribute('data-finish');
         const category = item.getAttribute('data-category');
-        const imgUrl = item.querySelector('.product-item-img img').getAttribute('src');
+        const img = item.querySelector('.product-item-img img');
+        const imgUrl = img ? img.getAttribute('src') : '';
 
         // Populate content
-        lightboxImg.setAttribute('src', imgUrl);
-        lightboxImg.setAttribute('alt', title);
-        lightboxCatLabel.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-        lightboxTitleText.textContent = title;
-        lightboxDescription.textContent = desc;
-        specComposition.textContent = fabric;
-        specDimensions.textContent = size;
-        specFinishing.textContent = finish;
+        if (lightboxImg) {
+            lightboxImg.setAttribute('src', imgUrl);
+            lightboxImg.setAttribute('alt', title || 'Product Image');
+        }
+        if (lightboxCatLabel) {
+            lightboxCatLabel.textContent = category ? (category.charAt(0).toUpperCase() + category.slice(1)) : '';
+        }
+        if (lightboxTitleText) {
+            lightboxTitleText.textContent = title || '';
+        }
+        if (lightboxDescription) {
+            lightboxDescription.textContent = desc || '';
+        }
 
         // Open modal
-        lightbox.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            lightbox.classList.add('open');
-        }, 10);
+        if (lightbox) {
+            lightbox.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                lightbox.classList.add('open');
+            }, 10);
+        }
     };
 
     const closeLightbox = () => {
+        if (!lightbox) return;
         lightbox.classList.remove('open');
         document.body.style.overflow = '';
         setTimeout(() => {
             lightbox.style.display = 'none';
-        }, 500); // Match transition duration
+        }, 500);
     };
 
     // Item Click Listeners for Lightbox
     productItems.forEach(item => {
-        // Clicking image opens lightbox
-        const imgWrapper = item.querySelector('.product-item-img');
-        if (imgWrapper) {
-            imgWrapper.addEventListener('click', () => openLightbox(item));
-        }
-
-        // Clicking details button opens lightbox
-        const specBtn = item.querySelector('.product-spec-btn');
-        if (specBtn) {
-            specBtn.addEventListener('click', () => openLightbox(item));
-        }
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', () => openLightbox(item));
     });
 
     // Close Lightbox listeners
@@ -124,15 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Close when clicking outside content container
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) {
-            closeLightbox();
-        }
-    });
+    if (lightbox) {
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+    }
 
     // Close with Escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+        if (e.key === 'Escape' && lightbox && lightbox.classList.contains('open')) {
             closeLightbox();
         }
     });
