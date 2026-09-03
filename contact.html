@@ -132,6 +132,11 @@
             <div class="contact-form-container reveal-right">
                 <form class="contact-form" id="enquiry-form" action="https://script.google.com/macros/s/AKfycbw-IHwVC4mVlD6nyoask082oH4MAOl8o-ghkOwR7nG-8BHs3GfjPQnVxLMUiOvbZX4Egg/exec" method="POST">
                     <h3>Enquiry Form</h3>
+
+                    <!-- Honeypot: invisible to humans, bots will fill this -->
+                    <div style="display:none; position:absolute; left:-9999px;" aria-hidden="true">
+                        <input type="text" name="website" id="honeypot" tabindex="-1" autocomplete="off">
+                    </div>
                     
                     <div class="form-group">
                         <label class="form-label" for="full-name">Full Name</label>
@@ -166,6 +171,12 @@
                     <div class="form-group">
                         <label class="form-label" for="message">Detailed Message</label>
                         <textarea class="form-input" id="message" name="message" required placeholder="Describe your specifications, colors, and quantities..."></textarea>
+                    </div>
+
+                    <!-- Simple Math CAPTCHA -->
+                    <div class="form-group">
+                        <label class="form-label" id="captcha-label">Security Check: <span id="captcha-question"></span></label>
+                        <input class="form-input" type="number" id="captcha-answer" placeholder="Enter your answer" required style="max-width: 160px;">
                     </div>
 
                     <div id="form-status" style="display: none; padding: 1rem; border-radius: 4px; margin-bottom: 1.2rem; font-size: 0.95rem; text-align: center; line-height: 1.5;"></div>
@@ -223,17 +234,49 @@
     <!-- Shared Navigation and Page Logic -->
     <script src="main.js"></script>
     <script>
-        // Google Sheets & Automated Email Integration via Google Apps Script
+        // Google Sheets & Automated Email Integration + Spam Protection
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('enquiry-form');
             const submitBtn = document.getElementById('submit-btn');
             const statusDiv = document.getElementById('form-status');
             const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-IHwVC4mVlD6nyoask082oH4MAOl8o-ghkOwR7nG-8BHs3GfjPQnVxLMUiOvbZX4Egg/exec';
 
+            // === MATH CAPTCHA SETUP ===
+            let captchaAnswer = 0;
+            function generateCaptcha() {
+                const a = Math.floor(Math.random() * 9) + 1;
+                const b = Math.floor(Math.random() * 9) + 1;
+                captchaAnswer = a + b;
+                document.getElementById('captcha-question').textContent = 'What is ' + a + ' + ' + b + '?';
+                document.getElementById('captcha-answer').value = '';
+            }
+            generateCaptcha();
+
             if (form) {
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    
+
+                    // === HONEYPOT CHECK ===
+                    const honeypot = document.getElementById('honeypot').value;
+                    if (honeypot) {
+                        // Bot detected — silently do nothing
+                        form.reset();
+                        generateCaptcha();
+                        return;
+                    }
+
+                    // === MATH CAPTCHA CHECK ===
+                    const userAnswer = parseInt(document.getElementById('captcha-answer').value, 10);
+                    if (userAnswer !== captchaAnswer) {
+                        statusDiv.style.display = 'block';
+                        statusDiv.style.backgroundColor = '#fff3e0';
+                        statusDiv.style.color = '#e65100';
+                        statusDiv.style.border = '1px solid #ffcc80';
+                        statusDiv.textContent = '⚠️ Incorrect answer to the security check. Please try again.';
+                        generateCaptcha();
+                        return;
+                    }
+
                     const originalBtnText = submitBtn.textContent;
                     submitBtn.textContent = 'Sending Enquiry...';
                     submitBtn.disabled = true;
@@ -264,6 +307,7 @@
                         statusDiv.style.border = '1px solid #c8e6c9';
                         statusDiv.innerHTML = '&#10003; <strong>Thank you!</strong> Your enquiry has been recorded and emailed to our team. We will get back to you shortly.';
                         form.reset();
+                        generateCaptcha();
                     } catch (error) {
                         statusDiv.style.display = 'block';
                         statusDiv.style.backgroundColor = '#ffebee';
