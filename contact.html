@@ -6,6 +6,7 @@
     <meta name="description" content="Contact Aasee Export for wholesale enquiries, custom textile manufacturing, and sample requests. Contact Sakthi Sree Devi K at sakthi@aaseeexport.com or +91 9500583445.">
     <title>Contact Us | Aasee Export</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 
@@ -173,6 +174,9 @@
                         <textarea class="form-input" id="message" name="message" required placeholder="Describe your specifications, colors, and quantities..."></textarea>
                     </div>
 
+                    <!-- Google reCAPTCHA v2 -->
+                    <div class="g-recaptcha" data-sitekey="6LeCEa4tAAAAAHsAYx1-l3gj2TuK00RO5JQ8i8It" style="margin-bottom: 1.2rem;"></div>
+
                     <div id="form-status" style="display: none; padding: 1rem; border-radius: 4px; margin-bottom: 1.2rem; font-size: 0.95rem; text-align: center; line-height: 1.5;"></div>
                     
                     <button class="btn btn-solid" id="submit-btn" type="submit" style="width: 100%; padding: 1.2rem; cursor: pointer;">Send Enquiry</button>
@@ -247,6 +251,17 @@
                         return;
                     }
 
+                    // === reCAPTCHA CHECK ===
+                    const recaptchaResponse = grecaptcha.getResponse();
+                    if (!recaptchaResponse) {
+                        statusDiv.style.display = 'block';
+                        statusDiv.style.backgroundColor = '#fff3e0';
+                        statusDiv.style.color = '#e65100';
+                        statusDiv.style.border = '1px solid #ffcc80';
+                        statusDiv.textContent = '⚠️ Please tick the "I\'m not a robot" checkbox before submitting.';
+                        return;
+                    }
+
                     const originalBtnText = submitBtn.textContent;
                     submitBtn.textContent = 'Sending Enquiry...';
                     submitBtn.disabled = true;
@@ -277,6 +292,7 @@
                         statusDiv.style.border = '1px solid #c8e6c9';
                         statusDiv.innerHTML = '&#10003; <strong>Thank you!</strong> Your enquiry has been recorded and emailed to our team. We will get back to you shortly.';
                         form.reset();
+                        grecaptcha.reset();
                     } catch (error) {
                         statusDiv.style.display = 'block';
                         statusDiv.style.backgroundColor = '#ffebee';
